@@ -1,0 +1,92 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model most_buy_orders {
+  id             Int     @id @unique(map: "id") @default(autoincrement())
+  rank           Int? 
+  token_cache_id Int
+  @@index([token_cache_id], map: "fk_token_cache_id_idx")
+}
+
+model most_sell_orders {
+  id             Int     @id @unique(map: "id") @default(autoincrement())
+  rank           Int?
+  token_cache_id Int
+  @@index([token_cache_id], map: "fk_token_cache_id_idx")
+}
+
+model notifications {
+  notification_id Int       @id @unique(map: "notification_id") @default(autoincrement())
+  text            String?   @db.Text
+  date            DateTime? @db.Date
+  user_id         Int
+  @@index([user_id], map: "fk_user_id_idx")
+}
+
+model orders {
+  order_id     Int                @id @unique(map: "order_id") @default(autoincrement())
+  pair_address String?            @db.VarChar(1000)
+  status       String?            @db.VarChar(100)
+  token_price  Float?
+  single_price Float?
+  from_price   Float?
+  to_price     Float?
+  budget       Float?
+  order_type   orders_order_type?
+  price_type   orders_price_type?
+  user_id      Int
+  @@index([user_id], map: "fk_user_id_idx")
+}
+
+model token_cache {
+  token_cache_id Int       @id @unique(map: "token_cache_id") @default(autoincrement())
+  name           String?   @db.VarChar(1000)
+  chain          String?   @db.VarChar(1000)
+  address        String?   @db.VarChar(1000)
+  price          Float?
+  change_24hr    Float?     
+  volume         Int?
+  market_cap     Int?
+  total_orders   Int?
+  buy_orders     Int?
+  sell_orders    Int?
+  last_updated   DateTime? @db.Date
+}
+
+model top_gainers {
+  id             Int     @id @unique(map: "id") @default(autoincrement())
+  rank           Int?
+  token_cache_id Int
+  @@index([token_cache_id], map: "fk_token_cache_id_idx")
+}
+
+model top_movers {
+  id             Int     @id @unique(map: "id") @default(autoincrement())
+  rank           Int?
+  token_cache_id Int
+  @@index([token_cache_id], map: "fk_token_cache_id_idx")
+}
+
+model users {
+  user_id  Int    @id @unique(map: "user_id") @default(autoincrement())
+  username String @unique(map: "username") @db.VarChar(50)
+  email    String @unique(map: "email") @db.VarChar(50)
+  password String @db.VarChar(1000)
+}
+
+enum orders_order_type {
+  buy
+  sell
+}
+
+enum orders_price_type {
+  range
+  single
+}

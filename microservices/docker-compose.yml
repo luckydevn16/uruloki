@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+
+  # #Get top movers & top gainers
+  # token_data:
+  #   build:
+  #     context: token_info
+  # #Prune token_cache
+  # prune:
+  #   build:
+  #     context: prune
+
+  # #Update token_cache data & market_cap
+  # market_cap:
+  #   build:
+  #     context: market_data
+  
+  # #Get most_buy_orders and most_sell_orders
+  # most_orders:
+  #   build:
+  #     context: most_orders
+
+  data-updater:
+    build:
+      context: data-updater-node-v2
+  

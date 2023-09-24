@@ -1,0 +1,181 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model most_buy_orders {
+  id             Int         @id @unique(map: "id") @default(autoincrement())
+  rank           Int?
+  token_cache_id Int
+  token_cache    token_cache @relation(fields: [token_cache_id], references: [id])
+
+  @@index([token_cache_id], map: "fk_token_cache_id_idx")
+}
+
+model most_sell_orders {
+  id             Int         @id @unique(map: "id") @default(autoincrement())
+  rank           Int?
+  token_cache_id Int
+  token_cache    token_cache @relation(fields: [token_cache_id], references: [id])
+
+  @@index([token_cache_id], map: "fk_token_cache_id_idx")
+}
+
+model notifications {
+  notification_id Int       @id @unique(map: "notification_id") @default(autoincrement())
+  text            String?   @db.Text
+  date            DateTime? @db.Date
+  user_id         Int
+
+  @@index([user_id], map: "fk_user_id_idx")
+}
+
+model orders {
+  order_id           Int                @id @unique(map: "order_id") @default(autoincrement())
+  pair_address       String             @db.VarChar(255)
+  status             String?            @db.VarChar(100)
+  single_price       Float?
+  from_price         Float?
+  to_price           Float?
+  budget             Float?
+  order_type         orders_order_type?
+  price_type         orders_price_type?
+  user_id            Int
+  baseTokenShortName String?            @db.VarChar(255)
+  pairTokenShortName String?            @db.VarChar(255)
+  baseTokenLongName  String?            @db.VarChar(255)
+  pairTokenLongName  String?            @db.VarChar(255)
+  is_continuous      Boolean?           @default(false)
+  creator_address    String?            @db.Text
+  token_cache        token_cache?       @relation(fields: [pair_address], references: [pair_address])
+  order_strategy     order_strategy[]
+
+  @@index([user_id], map: "fk_user_id_idx")
+  @@index([pair_address], map: "fk_pair_address_idx")
+}
+
+model strategies {
+  strategy_id     Int              @unique(map: "id") @default(autoincrement())
+  name            String           @db.LongText
+  createdAt       DateTime?        @db.Timestamp(0)
+  status          String?          @db.VarChar(100)
+  creator_address String?          @db.Text
+  order_strategy  order_strategy[]
+}
+
+model order_strategy {
+  id         Int        @id @default(autoincrement())
+  orderId    Int
+  strategyId Int
+  order      orders     @relation(fields: [orderId], references: [order_id])
+  strategy   strategies @relation(fields: [strategyId], references: [strategy_id])
+
+  @@unique([orderId, strategyId], name: "order_strategy_unique", map: "order_strategy_unique")
+}
+
+model token_cache {
+  name             String?            @db.VarChar(1000)
+  chain            String?            @db.VarChar(1000)
+  pair_address     String             @unique(map: "pair_address") @db.VarChar(255)
+  price            Float?
+  change_24hr      Float?
+  volume           Int?
+  market_cap       Float?
+  last_updated     DateTime?          @db.Date
+  id               Int                @id @unique(map: "id") @default(autoincrement())
+  address          String?            @db.VarChar(1000)
+  short_name       String?            @db.VarChar(1000)
+  orders           orders[]
+  most_buy_orders  most_buy_orders[]
+  most_sell_orders most_sell_orders[]
+  top_gainers      top_gainers[]
+  top_movers       top_movers[]
+}
+
+model top_gainers {
+  id             Int         @id @unique(map: "id") @default(autoincrement())
+  rank           Int?
+  token_cache_id Int
+  token_cache    token_cache @relation(fields: [token_cache_id], references: [id])
+
+  @@index([token_cache_id], map: "fk_token_cache_id_idx")
+}
+
+model top_movers {
+  id             Int         @id @unique(map: "id") @default(autoincrement())
+  rank           Int?
+  token_cache_id Int
+  token_cache    token_cache @relation(fields: [token_cache_id], references: [id])
+
+  @@index([token_cache_id], map: "fk_token_cache_id_idx")
+}
+
+model users {
+  user_id  Int    @id @unique(map: "user_id") @default(autoincrement())
+  username String @unique(map: "username") @db.VarChar(50)
+  email    String @unique(map: "email") @db.VarChar(50)
+  password String @db.VarChar(1000)
+}
+
+model cache {
+  id          Int     @id @default(autoincrement())
+  timestamp   Int
+  data_key    String? @db.LongText
+  cached_data String? @db.LongText
+  ttl         Int
+}
+
+model caff248_e446_5d62_a2b8_9145881b8240_20230614143235_vrepl {
+  strategy_id     Int       @unique(map: "id") @default(autoincrement())
+  name            String    @db.LongText
+  user_id         Int
+  createdAt       DateTime? @db.Timestamp(0)
+  status          String?   @db.VarChar(100)
+  creator_address String?   @db.Text
+
+  @@map("_5caff248_e446_5d62_a2b8_9145881b8240_20230614143235_vrepl")
+}
+
+model test_orders {
+  pair_address       String                  @db.VarChar(255)
+  status             String?                 @db.VarChar(100)
+  single_price       Float?
+  from_price         Float?
+  to_price           Float?
+  budget             Float?
+  order_type         test_orders_order_type?
+  price_type         test_orders_price_type?
+  user_id            Int
+  baseTokenShortName String?                 @db.VarChar(255)
+  pairTokenShortName String?                 @db.VarChar(255)
+  baseTokenLongName  String?                 @db.VarChar(255)
+  pairTokenLongName  String?                 @db.VarChar(255)
+  is_continuous      Boolean?                @default(false)
+  creator_address    String?                 @db.Text
+  order_id           Int                     @id @default(autoincrement())
+}
+
+enum orders_order_type {
+  buy
+  sell
+}
+
+enum orders_price_type {
+  range
+  single
+}
+
+enum test_orders_order_type {
+  buy
+  sell
+}
+
+enum test_orders_price_type {
+  range
+  single
+}

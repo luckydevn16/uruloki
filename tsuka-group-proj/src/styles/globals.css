@@ -1,0 +1,200 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+.html,
+body {
+  --tw-bg-opacity: 1;
+  background-color: rgb(19 21 31 / var(--tw-bg-opacity));
+}
+
+::-webkit-scrollbar {
+  width: 0;
+}
+
+.scrollable::-webkit-scrollbar {
+  width: 5px;
+}
+
+.scrollable::-webkit-scrollbar-track {
+  background: #1f2333;
+}
+.scrollable::-webkit-scrollbar-thumb {
+  background: #343c4f;
+  border-radius: 5px;
+}
+.scrollable::-webkit-scrollbar-thumb:hover {
+  background: #4d556a;
+}
+.scrollable::-webkit-scrollbar-corner {
+  background-color: #1f2333;
+}
+
+.landing-container {
+  max-width: 1440px;
+  overflow: hidden;
+  margin: auto;
+}
+@media (min-width: 1440px) {
+  .landing-container {
+    max-width: 100%;
+  }
+}
+
+.inner-container {
+  width: 100%;
+  padding-left: 16px;
+  padding-right: 16px;
+  margin: auto;
+}
+@media (min-width: 768px) {
+  .inner-container {
+    padding-left: 64px;
+    padding-right: 64px;
+  }
+}
+@media (min-width: 1440px) {
+  .inner-container {
+    padding-left: 112px;
+    padding-right: 112px;
+  }
+}
+/* Import custom fonts */
+/* @import '../../tailwind.config.js'; */
+
+/* Gilroy font */
+@font-face {
+  font-family: "Gilroy-Light";
+  src: url("../../public/fonts/gilroy/Gilroy-Light.ttf");
+}
+@font-face {
+  font-family: "Gilroy";
+  src: url("../../public/fonts/gilroy/Gilroy-Regular.ttf");
+}
+@font-face {
+  font-family: "Gilroy-Medium";
+  src: url("../../public/fonts/gilroy/Gilroy-Medium.ttf");
+}
+@font-face {
+  font-family: "Gilroy-SemiBold";
+  src: url("../../public/fonts/gilroy/Gilroy-SemiBold.ttf");
+}
+@font-face {
+  font-family: "Gilroy-Bold";
+  src: url("../../public/fonts/gilroy/Gilroy-Bold.ttf");
+}
+@font-face {
+  font-family: "Gilroy-ExtraBold";
+  src: url("../../public/fonts/gilroy/Gilroy-ExtraBold.ttf");
+}
+
+/* Inter font */
+@font-face {
+  font-family: "Inter-Light";
+  src: url("../../public/fonts/inter/static/Inter-Light.ttf");
+}
+@font-face {
+  font-family: "Inter";
+  src: url("../../public/fonts/inter/static/Inter-Regular.ttf");
+}
+@font-face {
+  font-family: "Inter-Medium";
+  src: url("../../public/fonts/inter/static/Inter-Medium.ttf");
+}
+@font-face {
+  font-family: "Inter-SemiBold";
+  src: url("../../public/fonts/inter/static/Inter-SemiBold.ttf");
+}
+@font-face {
+  font-family: "Inter-Bold";
+  src: url("../../public/fonts/inter/static/Inter-Bold.ttf");
+}
+@font-face {
+  font-family: "Inter-ExtraBold";
+  src: url("../../public/fonts/inter/static/Inter-ExtraBold.ttf");
+}
+
+/* Steradian font */
+@font-face {
+  font-family: "Steradian";
+  src: url("../../public/fonts/steradian/EMT_Steradian_TRIAL/SteradianTRIAL-Rg.otf");
+}
+@font-face {
+  font-family: "Steradian-Medium";
+  src: url("../../public/fonts/steradian/EMT_Steradian_TRIAL/SteradianTRIAL-Md.otf");
+}
+@font-face {
+  font-family: "Steradian-Bold";
+  src: url("../../public/fonts/steradian/EMT_Steradian_TRIAL/SteradianTRIAL-Bd.otf");
+}
+@font-face {
+  font-family: "Steradian-ExtraBold";
+  src: url("../../public/fonts/steradian/EMT_Steradian_TRIAL/SteradianTRIAL-Blk.otf");
+}
+@font-face {
+  font-family: "Steradian-Light";
+  src: url("../../public/fonts/steradian/EMT_Steradian_TRIAL/SteradianTRIAL-Lt.otf");
+}
+@font-face {
+  font-family: "Uruloki";
+  src: url("/fonts/landing/DejitaruTsuka-Regular.otf");
+}
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(359deg);
+  }
+}
+
+.rotate {
+  animation: rotation 1s infinite linear;
+}
+
+.create-order-button:hover .tooltiptext {
+  visibility: visible;
+}
+
+.create-order-button {
+  position: relative;
+  border-bottom: 1px dotted rgb(20, 20, 20);
+}
+
+.basic-multi-select {
+  width: 100%;
+}
+
+.create-order-button .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  top: -5px;
+  right: 101%;
+}
+
+.create-order-button .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent transparent black;
+}

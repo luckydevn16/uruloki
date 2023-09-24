@@ -1,0 +1,155 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model cache {
+  id          Int     @id @default(autoincrement())
+  timestamp   Int
+  data_key    String? @db.LongText
+  cached_data String? @db.LongText
+  ttl         Int
+}
+
+model most_buy_orders {
+  id             Int  @id @unique(map: "id") @default(autoincrement())
+  rank           Int?
+  token_cache_id Int
+
+  @@index([token_cache_id], map: "fk_token_cache_id_idx")
+}
+
+model most_sell_orders {
+  id             Int  @id @unique(map: "id") @default(autoincrement())
+  rank           Int?
+  token_cache_id Int
+
+  @@index([token_cache_id], map: "fk_token_cache_id_idx")
+}
+
+model notifications {
+  notification_id Int       @id @unique(map: "notification_id") @default(autoincrement())
+  text            String?   @db.Text
+  date            DateTime? @db.Date
+  user_id         Int
+
+  @@index([user_id], map: "fk_user_id_idx")
+}
+
+model order_strategy {
+  id         Int @id @default(autoincrement())
+  orderId    Int
+  strategyId Int
+
+  @@unique([orderId, strategyId], map: "order_strategy_unique")
+}
+
+model orders {
+  order_id           Int                @id @unique(map: "order_id") @default(autoincrement())
+  pair_address       String             @db.VarChar(255)
+  status             String?            @db.VarChar(100)
+  single_price       Float?
+  from_price         Float?
+  to_price           Float?
+  budget             Float?
+  order_type         orders_order_type?
+  price_type         orders_price_type?
+  user_id            Int
+  baseTokenShortName String?            @db.VarChar(255)
+  pairTokenShortName String?            @db.VarChar(255)
+  baseTokenLongName  String?            @db.VarChar(255)
+  pairTokenLongName  String?            @db.VarChar(255)
+  is_continuous      Boolean?           @default(false)
+  creator_address    String?            @db.Text
+
+  @@index([pair_address], map: "fk_pair_address_idx")
+  @@index([user_id], map: "fk_user_id_idx")
+}
+
+model strategies {
+  strategy_id     Int       @unique(map: "id") @default(autoincrement())
+  name            String    @db.LongText
+  createdAt       DateTime? @db.Timestamp(0)
+  status          String?   @db.VarChar(100)
+  creator_address String?   @db.Text
+}
+
+model test_orders {
+  pair_address       String                  @db.VarChar(255)
+  status             String?                 @db.VarChar(100)
+  single_price       Float?
+  from_price         Float?
+  to_price           Float?
+  budget             Float?
+  order_type         test_orders_order_type?
+  price_type         test_orders_price_type?
+  user_id            Int
+  baseTokenShortName String?                 @db.VarChar(255)
+  pairTokenShortName String?                 @db.VarChar(255)
+  baseTokenLongName  String?                 @db.VarChar(255)
+  pairTokenLongName  String?                 @db.VarChar(255)
+  is_continuous      Boolean?                @default(false)
+  creator_address    String?                 @db.Text
+  order_id           Int                     @id @default(autoincrement())
+}
+
+model token_cache {
+  name         String?   @db.VarChar(1000)
+  chain        String?   @db.VarChar(1000)
+  pair_address String    @unique(map: "pair_address") @db.VarChar(255)
+  price        Float?
+  change_24hr  Float?
+  volume       Int?
+  market_cap   Float?
+  last_updated DateTime? @db.Date
+  id           Int       @id @unique(map: "id") @default(autoincrement())
+  address      String?   @db.VarChar(1000)
+  short_name   String?   @db.VarChar(1000)
+}
+
+model top_gainers {
+  id             Int  @id @unique(map: "id") @default(autoincrement())
+  rank           Int?
+  token_cache_id Int
+
+  @@index([token_cache_id], map: "fk_token_cache_id_idx")
+}
+
+model top_movers {
+  id             Int  @id @unique(map: "id") @default(autoincrement())
+  rank           Int?
+  token_cache_id Int
+
+  @@index([token_cache_id], map: "fk_token_cache_id_idx")
+}
+
+model users {
+  user_id  Int    @id @unique(map: "user_id") @default(autoincrement())
+  username String @unique(map: "username") @db.VarChar(50)
+  email    String @unique(map: "email") @db.VarChar(50)
+  password String @db.VarChar(1000)
+}
+
+enum test_orders_order_type {
+  buy
+  sell
+}
+
+enum test_orders_price_type {
+  range
+  single
+}
+
+enum orders_order_type {
+  buy
+  sell
+}
+
+enum orders_price_type {
+  range
+  single
+}
